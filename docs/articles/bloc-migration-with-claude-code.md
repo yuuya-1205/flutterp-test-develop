@@ -13,7 +13,28 @@
 
 ---
 
-## 1. 移行前後のアーキテクチャ
+## 1. 開発フロー全体（今回やったこと）
+
+```mermaid
+flowchart TD
+    G[依頼: BLoC で実装してほしい] --> H[bloc スキルを起動して規約を確認]
+    H --> I[pubspec に bloc/flutter_bloc/equatable 追加]
+    I --> J[counter_bloc.dart / counter_page.dart 作成]
+    J --> K[main.dart を BlocProvider 化]
+    K --> L[commit / push → PR #1 が更新]
+
+    L --> M[依頼: マージして]
+    M --> N{mergeable?}
+    N -- clean --> O[squash merge → main]
+    O --> P([完了 🎉])
+```
+
+ポイントは、AGENTS.md に書かれた **ブランチ戦略（GitHub Flow）** と **「Squash merge で main へ」** という規約を、そのまま実作業でも踏襲している点です。
+実装 → コミット → マージが一気通貫でつながっています。
+
+---
+
+## 2. 移行前後のアーキテクチャ
 
 ### Before: `setState` 版
 
@@ -49,7 +70,7 @@ flowchart LR
 
 ---
 
-## 2. クラス図
+## 3. クラス図
 
 BLoC を構成するクラスの関係です。Event / State はともに `Equatable` を継承し、`CounterBloc` は `Bloc<CounterEvent, CounterState>` を継承します。
 
@@ -100,7 +121,7 @@ classDiagram
 
 ---
 
-## 3. ブロック構成図（ウィジェットツリー）
+## 4. ブロック構成図（ウィジェットツリー）
 
 アプリ起動時のウィジェットの組み立てと、`CounterBloc` の供給範囲です。
 
@@ -129,7 +150,7 @@ flowchart TD
 
 ---
 
-## 4. ランタイムのデータフロー（ボタンを押したとき）
+## 5. ランタイムのデータフロー（ボタンを押したとき）
 
 ```mermaid
 sequenceDiagram
@@ -152,7 +173,7 @@ sequenceDiagram
 
 ---
 
-## 5. 同期した Skills と AGENTS.md
+## 6. 同期した Skills と AGENTS.md
 
 | ファイル | 役割 |
 | --- | --- |
@@ -167,7 +188,7 @@ sequenceDiagram
 
 ---
 
-## 6. 実装の要点（規約への準拠）
+## 7. 実装の要点（規約への準拠）
 
 `lib/counter/counter_bloc.dart` に Event / State / Bloc を**1ファイルへ集約**しました。
 
@@ -215,7 +236,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
 
 ---
 
-## 7. 学び
+## 8. 学び
 
 - **AGENTS.md / Skills は「実装の地図」**：ルールを先に整備しておくと、後続の実装が一貫した形に収束する。
 - **ドキュメントと実装が同じ規約で揃う**：「Squash merge で main へ」のような運用ルールまで実作業に反映できた。
