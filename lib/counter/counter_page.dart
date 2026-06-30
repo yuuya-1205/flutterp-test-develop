@@ -33,7 +33,7 @@ class CounterPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        // add は直接呼ばず、Bloc が公開する窓口メソッドを呼ぶ。
+        // add は直接呼ばず、Bloc が公開するメソッド（add をラップした入口）を呼ぶ。
         onPressed: () => context.read<CounterBloc>().increment(),
         tooltip: 'Increment',
         child: const Icon(Icons.add),

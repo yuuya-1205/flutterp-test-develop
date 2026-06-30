@@ -51,7 +51,7 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph View
-      P[CounterPage] -->|increment 窓口メソッド| BL
+      P[CounterPage] -->|increment 公開メソッド| BL
       P -.->|BlocBuilder で購読| BL
     end
 
@@ -65,7 +65,7 @@ flowchart LR
 ```
 
 - **状態の保持・更新は Bloc が担当**（Widget は状態を持たない）。
-- UI は `add` を直接呼ばず、Bloc が公開する **窓口メソッド `increment()`** を呼ぶ。
+- UI は `add` を直接呼ばず、Bloc が公開する **公開メソッド `increment()`（`add` をラップした入口）** を呼ぶ。
 - `CounterState` は `Equatable` による**不変クラス**。`BlocBuilder` が状態変化を購読して再描画する。
 
 ---
@@ -117,7 +117,7 @@ classDiagram
 
 - `CounterEvent` は `sealed` 基底クラス、`CounterIncremented` がその具象イベント。
 - `CounterState` は `count` を持つ不変クラス（`props` で値比較）。
-- `CounterBloc` は Event を受けて State を `emit` する。公開窓口は `increment()`、ハンドラは `_onIncremented`。
+- `CounterBloc` は Event を受けて State を `emit` する。公開メソッド（`add` をラップした入口）は `increment()`、ハンドラは `_onIncremented`。
 
 ---
 
@@ -146,7 +146,7 @@ flowchart TD
 
 - `BlocProvider` が `CounterPage` のサブツリーへ `CounterBloc` を供給する。
 - `BlocBuilder` は `context` 経由で Bloc を購読し、`state.count` を描画。
-- `FloatingActionButton` は `context.read<CounterBloc>().increment()` で窓口メソッドを呼ぶ。
+- `FloatingActionButton` は `context.read<CounterBloc>().increment()` で公開メソッド（`add` をラップした入口）を呼ぶ。
 
 ---
 
@@ -169,7 +169,7 @@ sequenceDiagram
     V->>U: 画面を再描画（count 更新）
 ```
 
-`UI → 窓口メソッド → Event → ハンドラ → emit(State) → BlocBuilder 再描画` という単方向の流れになっています。
+`UI → 公開メソッド → Event → ハンドラ → emit(State) → BlocBuilder 再描画` という単方向の流れになっています。
 
 ---
 
@@ -218,7 +218,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<CounterIncremented>(_onIncremented); // メソッド参照で登録
   }
 
-  /// add を隠蔽した窓口メソッド。
+  /// 加算する（add をラップした入口＝公開メソッド）。
   void increment() => add(const CounterIncremented());
 
   void _onIncremented(CounterIncremented event, Emitter<CounterState> emit) {
@@ -231,7 +231,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
 
 - **1ファイル集約**：Event を別ファイルに分割しない／Facade を作らない。
 - **メソッド参照で登録**：`on<...>(_onIncremented)`（インラインのラムダにしない）。
-- **窓口メソッド**：UI は `add` を直接書かず `increment()` を呼ぶ。
+- **公開メソッド（`add` をラップした入口）**：UI は `add` を直接書かず `increment()` を呼ぶ。
 - **未使用物を持ち込まない**：UI が加算のみのため `decrement()` は実装しない。
 
 ---

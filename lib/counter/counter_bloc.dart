@@ -36,7 +36,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<CounterIncremented>(_onIncremented);
   }
 
-  /// 加算する（イベントの add を隠蔽した窓口）。
+  /// 加算する（add をラップした入口＝公開メソッド）。
   void increment() => add(const CounterIncremented());
 
   void _onIncremented(CounterIncremented event, Emitter<CounterState> emit) {
