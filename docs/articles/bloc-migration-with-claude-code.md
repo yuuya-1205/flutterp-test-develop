@@ -49,7 +49,87 @@ flowchart LR
 
 ---
 
-## 2. ランタイムのデータフロー（ボタンを押したとき）
+## 2. クラス図
+
+BLoC を構成するクラスの関係です。Event / State はともに `Equatable` を継承し、`CounterBloc` は `Bloc<CounterEvent, CounterState>` を継承します。
+
+```mermaid
+classDiagram
+    class Equatable {
+        <<abstract>>
+        +List~Object~ props
+    }
+
+    class Bloc~Event, State~ {
+        <<abstract>>
+        +State state
+        +on(handler)
+        +add(event)
+    }
+
+    class CounterEvent {
+        <<sealed>>
+        +List~Object~ props
+    }
+
+    class CounterIncremented {
+        +const CounterIncremented()
+    }
+
+    class CounterState {
+        +int count
+        +List~Object~ props
+    }
+
+    class CounterBloc {
+        +increment() void
+        -_onIncremented(event, emit) void
+    }
+
+    Equatable <|-- CounterEvent
+    CounterEvent <|-- CounterIncremented
+    Equatable <|-- CounterState
+    Bloc <|-- CounterBloc
+    CounterBloc ..> CounterEvent : handles
+    CounterBloc ..> CounterState : emits
+```
+
+- `CounterEvent` は `sealed` 基底クラス、`CounterIncremented` がその具象イベント。
+- `CounterState` は `count` を持つ不変クラス（`props` で値比較）。
+- `CounterBloc` は Event を受けて State を `emit` する。公開窓口は `increment()`、ハンドラは `_onIncremented`。
+
+---
+
+## 3. ブロック構成図（ウィジェットツリー）
+
+アプリ起動時のウィジェットの組み立てと、`CounterBloc` の供給範囲です。
+
+```mermaid
+flowchart TD
+    A[MyApp] --> B[MaterialApp]
+    B --> C["BlocProvider&lt;CounterBloc&gt;<br/>create: CounterBloc()"]
+    C --> D[CounterPage]
+    D --> E[Scaffold]
+    E --> F[AppBar]
+    E --> G[Center → Column]
+    E --> H["FloatingActionButton<br/>onPressed: increment()"]
+    G --> I[Text 固定文言]
+    G --> J["BlocBuilder&lt;CounterBloc, CounterState&gt;<br/>state.count を表示"]
+
+    C -. provides .-> J
+    C -. provides .-> H
+
+    classDef provider fill:#e8f0fe,stroke:#4285f4;
+    class C provider;
+```
+
+- `BlocProvider` が `CounterPage` のサブツリーへ `CounterBloc` を供給する。
+- `BlocBuilder` は `context` 経由で Bloc を購読し、`state.count` を描画。
+- `FloatingActionButton` は `context.read<CounterBloc>().increment()` で窓口メソッドを呼ぶ。
+
+---
+
+## 4. ランタイムのデータフロー（ボタンを押したとき）
 
 ```mermaid
 sequenceDiagram
@@ -72,7 +152,7 @@ sequenceDiagram
 
 ---
 
-## 3. 同期した Skills と AGENTS.md
+## 5. 同期した Skills と AGENTS.md
 
 | ファイル | 役割 |
 | --- | --- |
@@ -87,7 +167,7 @@ sequenceDiagram
 
 ---
 
-## 4. 実装の要点（規約への準拠）
+## 6. 実装の要点（規約への準拠）
 
 `lib/counter/counter_bloc.dart` に Event / State / Bloc を**1ファイルへ集約**しました。
 
@@ -135,7 +215,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
 
 ---
 
-## 5. 学び
+## 7. 学び
 
 - **AGENTS.md / Skills は「実装の地図」**：ルールを先に整備しておくと、後続の実装が一貫した形に収束する。
 - **ドキュメントと実装が同じ規約で揃う**：「Squash merge で main へ」のような運用ルールまで実作業に反映できた。
