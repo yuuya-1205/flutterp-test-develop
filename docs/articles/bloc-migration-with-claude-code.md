@@ -13,35 +13,7 @@
 
 ---
 
-## 1. 開発フロー全体（今回やったこと）
-
-```mermaid
-flowchart TD
-    A[依頼: Skills と AGENTS.md を同期] --> B{ソースに<br/>アクセスできる?}
-    B -- いいえ（スコープ外） --> C[内容を直接共有してもらう]
-    C --> D[AGENTS.md と<br/>4つの SKILL.md を作成]
-    D --> E[commit / push]
-    E --> F[PR #1 を作成]
-
-    F --> G[依頼: BLoC で実装してほしい]
-    G --> H[bloc スキルを起動して規約を確認]
-    H --> I[pubspec に bloc/flutter_bloc/equatable 追加]
-    I --> J[counter_bloc.dart / counter_page.dart 作成]
-    J --> K[main.dart を BlocProvider 化]
-    K --> L[commit / push → PR #1 が更新]
-
-    L --> M[依頼: マージして]
-    M --> N{mergeable?}
-    N -- clean --> O[squash merge → main]
-    O --> P([完了 🎉])
-```
-
-ポイントは、AGENTS.md に書かれた **ブランチ戦略（GitHub Flow）** と **「Squash merge で main へ」** という規約を、そのまま実作業でも踏襲している点です。
-ドキュメント（ルール）→ 実装 → マージが一気通貫でつながっています。
-
----
-
-## 2. 移行前後のアーキテクチャ
+## 1. 移行前後のアーキテクチャ
 
 ### Before: `setState` 版
 
@@ -77,7 +49,7 @@ flowchart LR
 
 ---
 
-## 3. ランタイムのデータフロー（ボタンを押したとき）
+## 2. ランタイムのデータフロー（ボタンを押したとき）
 
 ```mermaid
 sequenceDiagram
@@ -100,7 +72,7 @@ sequenceDiagram
 
 ---
 
-## 4. 同期した Skills と AGENTS.md
+## 3. 同期した Skills と AGENTS.md
 
 | ファイル | 役割 |
 | --- | --- |
@@ -115,7 +87,7 @@ sequenceDiagram
 
 ---
 
-## 5. 実装の要点（規約への準拠）
+## 4. 実装の要点（規約への準拠）
 
 `lib/counter/counter_bloc.dart` に Event / State / Bloc を**1ファイルへ集約**しました。
 
@@ -163,7 +135,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
 
 ---
 
-## 6. 学び
+## 5. 学び
 
 - **AGENTS.md / Skills は「実装の地図」**：ルールを先に整備しておくと、後続の実装が一貫した形に収束する。
 - **ドキュメントと実装が同じ規約で揃う**：「Squash merge で main へ」のような運用ルールまで実作業に反映できた。
