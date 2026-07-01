@@ -1,4 +1,10 @@
-# バイブコーディングと、AGENTS.md × Skills の関係
+---
+title: "バイブコーディングと、AGENTS.md × Skills の関係"
+emoji: "🗺️"
+type: "idea"
+topics: ["claudecode", "ai", "flutter", "vibecoding", "zenn"]
+published: false
+---
 
 「バイブコーディング（vibe coding）」＝自然言語でエージェントと対話しながら、動くものを見つつ会話で仕上げていく開発スタイルです。
 この記事では、その一連の流れと、土台になる **`AGENTS.md`** と **Skills** の関係を図解します。
