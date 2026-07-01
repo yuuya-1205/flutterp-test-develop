@@ -49,7 +49,7 @@ class CounterIncremented extends CounterEvent {
 ## Bloc の規約
 
 - コンストラクタで初期 State を `super(...)` に渡し、`on<Event>(_onXxx)` でハンドラを**メソッド参照**として登録する（インラインのラムダにしない）。
-- UI へ公開する操作は、`add` を隠蔽した**公開メソッド**（窓口メソッド）として実装する。UI はこのメソッドを呼び、`add` は直接書かせない。
+- UI へ公開する操作は、`add` を隠蔽した**公開メソッド**（`add` をラップした入口）として実装する。UI はこのメソッドを呼び、`add` は直接書かせない。
 - ハンドラは `void _onXxx(XxxEvent event, Emitter<State> emit)` の名前付きメソッドにする。
 
 ```dart
@@ -60,10 +60,10 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<CounterDecremented>(_onDecremented);
   }
 
-  /// 加算する（イベントの add を隠蔽した窓口）。
+  /// 加算する（add をラップした入口＝公開メソッド）。
   void increment() => add(const CounterIncremented());
 
-  /// 減算する（イベントの add を隠蔽した窓口）。
+  /// 減算する（add をラップした入口＝公開メソッド）。
   void decrement() => add(const CounterDecremented());
 
   void _onIncremented(CounterIncremented event, Emitter<CounterState> emit) {
@@ -79,7 +79,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
 ## やってはいけないこと
 
 - Event を別ファイル（part 'xxx_event.dart'）に分割しない。
-- 別ファイルの Facade クラスを作らない（窓口メソッドは Bloc 内に置く）。
+- 別ファイルの Facade クラスを作らない（公開メソッドは Bloc 内に置く）。
 - ハンドラ登録をインラインのラムダで書かない（メソッド参照にする）。
 - 使わないヘルパー・引数（未使用の usecase 注入など）を持ち込まない。
 
