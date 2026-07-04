@@ -1,8 +1,11 @@
 # AGENTS.md
 
-このファイルは、AI エージェント（GitHub Copilot や Claude Code など）がこのリポジトリで作業するときに
-常に従う基本ルールをまとめたものです。詳細な規約は各 Skill や `docs/` に委譲し、
+このファイルは、GitHub Copilot（Copilot CLI / coding agent など）がこのリポジトリで作業するときに
+常に従う基本ルールをまとめたものです。詳細な規約は各 Skill（`.github/skills/`）や `docs/` に委譲し、
 ここには「入口と地図」となる本質的なルールだけを置きます。
+
+> Copilot は `.github/skills/<name>/SKILL.md` を Skill として読み込みます。
+> 状態管理・テストの具体的な書き方は、対応する Skill を参照してください。
 
 ## 1. プロジェクト概要
 
@@ -98,5 +101,6 @@ Pull Request:
 - `README.md` … プロジェクトの概要・入門情報
 - `pubspec.yaml` … 依存関係・アセットの定義
 - `analysis_options.yaml` … 静的解析(lint)ルール
+- `.github/skills/` … Copilot が読み込む Skill 群（`bloc` / `bloc-state` / `bloc-test` / `test-workflow`）
 - `docs/test-design-template.md` … テスト設計書のテンプレート（テスト実装の起点）
 - `tool/metrics.sh` … 物理KLOC / テスト件数 / テスト密度 / バグ密度を算出するスクリプト
