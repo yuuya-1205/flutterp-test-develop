@@ -1,4 +1,10 @@
-# Claude Code で Skills を整備し、Flutter アプリを BLoC 化してマージするまで
+---
+title: "Claude Code で Skills を整備し Flutter アプリを BLoC 化してマージするまで"
+emoji: "🐦"
+type: "tech"
+topics: ["flutter", "dart", "bloc", "claudecode", "ai"]
+published: false
+---
 
 このリポジトリ（`flutterp-test-develop`）で実際に行った一連の作業を、記事としてまとめます。
 「AI エージェント向けのルール（AGENTS.md / Skills）を別リポジトリから移植し、その規約に沿ってアプリを BLoC で実装し、PR を作ってマージする」までの流れです。
