@@ -5,7 +5,7 @@ import 'counter/counter_bloc.dart';
 import 'counter/counter_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyApp()); // coverage:ignore-line
 }
 
 class MyApp extends StatelessWidget {

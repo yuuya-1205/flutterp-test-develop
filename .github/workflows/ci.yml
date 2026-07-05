@@ -1,0 +1,58 @@
+name: CI
+
+# test-workflow フェーズ4（CI・品質ゲート）の実体。
+# PR と main への push で analyze → test → カバレッジ100%チェックを実行する。
+# 参照: .github/skills/test-workflow/SKILL.md
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality-gate:
+    name: analyze / test / coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Format check
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze (警告0)
+        run: flutter analyze
+
+      - name: Test with coverage
+        run: flutter test --coverage
+
+      - name: Install lcov
+        run: sudo apt-get update && sudo apt-get install -y lcov
+
+      - name: Coverage gate (100%)
+        run: |
+          # main() などテスト不能行は // coverage:ignore-line で除外済み。
+          SUMMARY=$(lcov --summary coverage/lcov.info 2>&1)
+          echo "$SUMMARY"
+          LINE_COV=$(echo "$SUMMARY" | grep -oE 'lines\.*: [0-9.]+%' | grep -oE '[0-9.]+' | head -1)
+          echo "line coverage = ${LINE_COV}%"
+          if [ "$(awk "BEGIN {print (${LINE_COV} < 100)}")" = "1" ]; then
+            echo "::error::ラインカバレッジが 100% 未満です (${LINE_COV}%)"
+            exit 1
+          fi
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/lcov.info
