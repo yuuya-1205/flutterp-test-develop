@@ -102,5 +102,6 @@ Pull Request:
 - `pubspec.yaml` … 依存関係・アセットの定義
 - `analysis_options.yaml` … 静的解析(lint)ルール
 - `.github/skills/` … Copilot が読み込む Skill 群（`bloc` / `bloc-state` / `bloc-test` / `test-workflow`）
+- `docs/requirements-template.md` … 要件整理のテンプレート（TDD の起点。テスト設計の前段）
 - `docs/test-design-template.md` … テスト設計書のテンプレート（テスト実装の起点）
 - `tool/metrics.sh` … 物理KLOC / テスト件数 / テスト密度 / バグ密度を算出するスクリプト

@@ -13,6 +13,8 @@ description: 品質の高いテストを「テスト設計書 → 実装 → 検
 
 ## フェーズ0. テスト設計書（Design）
 
+> 前段として、`docs/requirements-template.md` で要件を整理しておく（要件整理 → テスト設計 → テスト実装）。
+
 `docs/test-design-template.md` をコピーして設計書を作成する。記入項目は以下。
 
 1. 対象を決める（例: `CounterBloc` / `CounterPage`）。
