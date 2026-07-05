@@ -1,0 +1,19 @@
+title: "テストがAIの仕様書になる ― Flutterで始めるTDD×AI開発実践"
+summary: "Flutter のカウンターアプリ1本を題材に、TDD（テスト駆動開発）と AI コーディングツールを組み合わせた開発の進め方を、環境構築から Bloc 移行・機能拡張・モック・CI まで通しで解説する実践書です。テストを『AIへの仕様書』として使う考え方を、手を動かしながら身につけます。"
+topics: ["flutter", "dart", "tdd", "ai", "claudecode"]
+published: false
+price: 0
+chapters:
+  - 01-why-tdd-ai
+  - 02-setup
+  - 03-tdd-by-human
+  - 04-ai-in-cycle
+  - 05-instructions
+  - 06-bloc
+  - 07-features
+  - 08-mock
+  - 09-ci
+  - 10-beyond
+  - 11-appendix-a
+  - 12-appendix-b
+  - 13-appendix-c
