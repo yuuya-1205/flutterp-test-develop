@@ -29,12 +29,12 @@ class WidgetbookApp extends StatelessWidget {
             return Theme(data: theme, child: child);
           },
         ),
-        // デバイスフレーム。
-        DeviceFrameAddon(
-          devices: [
-            Devices.ios.iPhone13,
-            Devices.ios.iPhoneSE,
-            Devices.android.samsungGalaxyS20,
+        // 画面サイズ（ビューポート）切り替え。
+        ViewportAddon(
+          [
+            IosViewports.iPhone13,
+            IosViewports.iPhoneSE,
+            AndroidViewports.samsungGalaxyS20,
           ],
         ),
         // 余白を付けて中身を見やすくする。
